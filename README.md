@@ -1,2 +1,2 @@
 # temporal
-Trend Empirical Ordered Analysis through likelihood
+Trend Empirical Ordered Analysis through Likelihood
