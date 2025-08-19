@@ -77,7 +77,7 @@ long double amt_cdf_approximated_normal(int n, long double e) {
     long double total = 0.0;
     int max_i = static_cast<int>(4 * log(n));
 
-    for (int i = 2; i < max_i; ++i) {
+    for (int i = 2; i < std::min(max_i, n); ++i) {
         boost::math::beta_distribution<long double> beta_dist((i - 1.0) / 2.0, (n - i) / 2.0);
         long double normal_pdf = pdf(norm_dist, i);
         long double beta_cdf = cdf(beta_dist, e);
