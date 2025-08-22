@@ -14,9 +14,9 @@
  */
 int main(int argc, char* argv[]) {
     std::vector<long double> data;
-    long double val;
-    while(std::cin.read(reinterpret_cast<char*>(&val), sizeof(long double))) {
-        data.push_back(val);
+    float val;
+    while(std::cin.read(reinterpret_cast<char*>(&val), sizeof(float))) {
+        data.push_back(static_cast<long double>(val));
     }
 
     // reading of batch size in argv 1
