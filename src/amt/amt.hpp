@@ -55,6 +55,16 @@ long double e_bar_statistic(const std::vector<long double>& pav, const std::vect
 */
 long double amt(std::vector<long double>& a);
 
+/** @brief Calculating of p-value of Analysis of Monotone Trend method
+ * Calculating of p-value of Analysis of Monotone Trend method.
+ * More information could be founded on main page of the project on github
+ * 
+ * @param a the exploring sequence
+ * @param pav_a the input array with applied pav procedure on it
+ * @return p-value 
+*/
+long double amt(std::vector<long double>& a, std::vector<long double>& pav_a);
+
 
 long double compute_sd_sum(int n) {
     long double sum = 0.0;
@@ -112,6 +122,13 @@ long double e_bar_statistic(const std::vector<long double>& pav, const std::vect
 
 long double amt(std::vector<long double>& a) {
     long double statistic = e_bar_statistic(pav(a), a);
+
+    return 1 - amt_cdf_approximated_normal(a.size(), statistic);
+}
+
+
+long double amt(std::vector<long double>& a, std::vector<long double>& pav_a) {
+    long double statistic = e_bar_statistic(pav_a, a);
 
     return 1 - amt_cdf_approximated_normal(a.size(), statistic);
 }
