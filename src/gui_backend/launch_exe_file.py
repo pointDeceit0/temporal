@@ -5,7 +5,7 @@ from numpy.typing import ArrayLike
 import os
 
 
-def launc_cpp_from_python(data: ArrayLike, path: str, *args) -> Tuple[bool, Any]:
+def launch_cpp_from_python(data: ArrayLike, path: str, *args) -> Tuple[bool, Any]:
     """Function takes data and forwards it to specified C++ compiled script
 
     The attempt to create generic function for launching compiled c++ scripts to launch it from python
@@ -66,7 +66,7 @@ def launc_cpp_from_python(data: ArrayLike, path: str, *args) -> Tuple[bool, Any]
 if __name__ == "__main__":
     import numpy as np
     print(
-        launc_cpp_from_python(
+        launch_cpp_from_python(
             np.random.random(20).astype(np.float32),
             "src/launch/compiled_exes/launch_amt.exe",
             '2'  # batch mean group
