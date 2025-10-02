@@ -210,3 +210,5 @@ __marimo__/
 # local path of compiled .exe files
 
 src/launch/compiled_exes
+
+.vscode
