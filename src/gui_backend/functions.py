@@ -1,8 +1,15 @@
 """The file consist of functions kit for using in gui"""
 import pandas as pd
 import numpy as np
-from launch_exe_file import launch_cpp_from_python
+import os
+import sys
 from typing import Tuple
+
+
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+
+from src.gui_backend.launch_exe_file import launch_cpp_from_python  # noqa
 
 
 def amt(data: pd.DataFrame, batch_size: int = 1,
@@ -33,7 +40,7 @@ def amt(data: pd.DataFrame, batch_size: int = 1,
     ret = {}
     for c in data:
         if not (res := launch_cpp_from_python(data[c].values, path, str(batch_size)))[0]:
-            return res
+            return res  # tuple recieved
 
         pvalue, pav = res[1].split('\n')
 
