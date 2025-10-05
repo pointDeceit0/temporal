@@ -7,7 +7,6 @@ import sys
 import os
 
 from stat_tests_inputs import AMTInWindow
-from dialogs import ErrorWindow
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 # HACK: Manually add the project root to sys.path to enable relative imports
@@ -66,7 +65,6 @@ class MainApplication(tk.Tk):
         # widgets launcing
         main_menubar = ToolBar(self)
         self.config(menu=main_menubar)
-        ErrorWindow('aboba')
 
     def display_data(self):
         """Displays recieved data in the table
