@@ -66,7 +66,6 @@ class MainApplication(tk.Tk):
         # widgets launcing
         main_menubar = ToolBar(self)
         self.config(menu=main_menubar)
-        ErrorWindow('aboba')
 
     def display_data(self):
         """Displays recieved data in the table
