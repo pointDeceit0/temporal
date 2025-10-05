@@ -6,11 +6,18 @@ from tkinter import filedialog
 import sys
 import os
 
+from stat_tests_inputs import AMTInWindow
+from dialogs import ErrorWindow
+
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+# HACK: Manually add the project root to sys.path to enable relative imports
+# when running 'temporal.py' directly from its location.
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
+# The linter (e.g., flake8/isort) would normally complain here,
+# but the sys.path modification is required for finding 'src'.
 import src.gui_backend.files_processing as fp  # noqa
-import src.gui_backend.functions as functions  # noqa
+
 
 FILE_TYPES = [
     ("All Excel files", "*.xls;*.xlsx;*.xlsm;*.xlt;*.xltx;*.xlsb")
@@ -18,37 +25,9 @@ FILE_TYPES = [
 MAIN_WINDOW_XWIDTH, MAIN_WINDOW_YWIDTH = 900, 600
 MAIN_WINDOW_XSHIFT, MAIN_WINDOW_YSHIFT = ..., 100
 
-ERROR_WINDOW_XWIDTH, ERROR_WINDOW_YWIDTH = 400, 150
-ERROR_WINDOW_XSHIFT, ERROR_WINDOW_YSHIFT = MAIN_WINDOW_XWIDTH // 2, 100 + MAIN_WINDOW_YWIDTH // 2
-
-
-class ErrorWindow(tk.Toplevel):
-
-    def __init__(self, error, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.geometry(f'{ERROR_WINDOW_XWIDTH}x{ERROR_WINDOW_YWIDTH}+'
-                      f'{ERROR_WINDOW_XSHIFT + self.winfo_screenwidth() // 5}+{ERROR_WINDOW_YSHIFT}')
-        self.resizable(0, 0)
-        self.title('Error')
-        self.iconphoto(False, tk.PhotoImage(file=r'.\images\error.png'))
-
-        t = tk.Text(self, state='normal')
-        scrollx = tk.Scrollbar(self, orient='horizontal', command=t.xview)
-        scrolly = tk.Scrollbar(self, orient='vertical', command=t.yview)
-        t.config(xscrollcommand=scrollx.set)
-        t.config(yscrollcommand=scrolly.set)
-
-        t.pack()
-        scrollx.pack()
-        scrolly.pack()
-
-        t.insert('1.0', error)
-        t.config(state='disabled')
-
 
 class ToolBar(tk.Menu):
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent: tk.Tk, *args, **kwargs):
         super().__init__(parent)
 
         self.file_menu = tk.Menu(self, tearoff=0)
@@ -57,7 +36,6 @@ class ToolBar(tk.Menu):
         self.file_menu.add_command(label="Exit", command=self.file_exit)
         self.add_cascade(label='File', menu=self.file_menu)
 
-        # TODO: make disable before dataframe upload
         self.tools_menu = tk.Menu(self, tearoff=0)
         self.tools_menu.add_command(label="AMT", command=self.tools_amt)
         self.add_cascade(label='Tools', menu=self.tools_menu)
@@ -88,6 +66,7 @@ class MainApplication(tk.Tk):
         # widgets launcing
         main_menubar = ToolBar(self)
         self.config(menu=main_menubar)
+        ErrorWindow('aboba')
 
     def display_data(self):
         """Displays recieved data in the table
@@ -111,13 +90,7 @@ class MainApplication(tk.Tk):
         self.display_data()
 
     def amt(self):
-        # windows opening with setting
-        done, data = functions.amt(self.df)
-        if not done:
-            # TODO: error processing
-            ...
-
-        # making new window
+        AMTInWindow(self, list(self.df))
 
 
 if __name__ == "__main__":
