@@ -48,10 +48,10 @@ class AMTInWindow(tk.Toplevel):
 
         # Entry for batch size input
         entry_batch_size = tk.Entry(self, font=(DEFAULT_FONT, 10, 'normal'), validate='key', validatecommand=vcmd)
-        entry_batch_size.insert(0, 10)
+        entry_batch_size.insert(0, 2)
 
         # grid chechboxes for plots
-        self.plots = [[i, tk.IntVar()] for i, _ in enumerate(range(3))]
+        self.plots = [[i, tk.IntVar(value=1)] for i, _ in enumerate(range(3))]
         tk.Checkbutton(self, text='Cummulative times plot', variable=self.plots[0][1]).grid(row=2, column=1, sticky='W')
         tk.Checkbutton(self, text='Step plot', variable=self.plots[1][1]).grid(row=3, column=1, sticky='W')
         tk.Checkbutton(self, text='ACF plots', variable=self.plots[2][1]).grid(row=4, column=1, sticky='W')
@@ -59,7 +59,7 @@ class AMTInWindow(tk.Toplevel):
         # grid variables checkboxes and save theirs results in self.boxes
         self.boxes = []
         for i, v in enumerate(variables):
-            var = tk.IntVar()
+            var = tk.IntVar(value=1)
             c = tk.Checkbutton(self, text=v, variable=var)
             self.boxes.append([v, var])
             c.grid(row=i + 2, column=0, sticky='W')

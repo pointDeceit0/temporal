@@ -7,7 +7,6 @@ import sys
 import os
 
 from stat_tests_inputs import AMTInWindow
-from dialogs import ErrorWindow
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 # HACK: Manually add the project root to sys.path to enable relative imports
