@@ -13,6 +13,7 @@ def process_app_file(path: str) -> pd.DataFrame:
     # TODO: when nulls are detected - it must be filled
     df = pd.read_excel(path)
     # check for numeric columns, keep only them
+    # in future it guarantees only numbers in dataframe
     df = df.loc[:, [pd.to_numeric(df.loc[~df[c].isna(), c], errors='coerce').notnull().all() for c in df]].astype(float)
     return df
 

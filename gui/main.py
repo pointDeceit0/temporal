@@ -6,31 +6,47 @@ from tkinter import filedialog
 import sys
 import os
 
+from stat_tests_inputs import AMTInWindow
+from dialogs import ErrorWindow
+
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+# HACK: Manually add the project root to sys.path to enable relative imports
+# when running 'temporal.py' directly from its location.
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
-import src.gui_backend.files_processing as fp
+# The linter (e.g., flake8/isort) would normally complain here,
+# but the sys.path modification is required for finding 'src'.
+import src.gui_backend.files_processing as fp  # noqa
 
 
 FILE_TYPES = [
     ("All Excel files", "*.xls;*.xlsx;*.xlsm;*.xlt;*.xltx;*.xlsb")
 ]
+MAIN_WINDOW_XWIDTH, MAIN_WINDOW_YWIDTH = 900, 600
+MAIN_WINDOW_XSHIFT, MAIN_WINDOW_YSHIFT = ..., 100
 
 
 class ToolBar(tk.Menu):
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent: tk.Tk, *args, **kwargs):
         super().__init__(parent)
 
         self.file_menu = tk.Menu(self, tearoff=0)
-        self.file_menu.add_command(label="Open...", command=self.open_file)
+        self.file_menu.add_command(label="Open...", command=self.file_open_file)
         self.file_menu.add_separator()
-        self.file_menu.add_command(label="Exit", command=self.exit)
+        self.file_menu.add_command(label="Exit", command=self.file_exit)
         self.add_cascade(label='File', menu=self.file_menu)
 
-    def exit(self):
+        self.tools_menu = tk.Menu(self, tearoff=0)
+        self.tools_menu.add_command(label="AMT", command=self.tools_amt)
+        self.add_cascade(label='Tools', menu=self.tools_menu)
+
+    def tools_amt(self):
+        self.master.amt()
+
+    def file_exit(self):
         self.master.destroy()
 
-    def open_file(self):
+    def file_open_file(self):
         self.master.process_file(filedialog.askopenfilename(filetypes=FILE_TYPES))
 
 
@@ -38,7 +54,7 @@ class MainApplication(tk.Tk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # imperical identified setting
-        self.geometry(f'900x600+{self.winfo_screenwidth() // 5}+100')
+        self.geometry(f'{MAIN_WINDOW_XWIDTH}x{MAIN_WINDOW_YWIDTH}+{self.winfo_screenwidth() // 5}+{MAIN_WINDOW_YSHIFT}')
         self.resizable(0, 0)
         self.title('temporal')
         self.iconphoto(False, tk.PhotoImage(file=r'.\images\title_image.png'))
@@ -50,6 +66,7 @@ class MainApplication(tk.Tk):
         # widgets launcing
         main_menubar = ToolBar(self)
         self.config(menu=main_menubar)
+        ErrorWindow('aboba')
 
     def display_data(self):
         """Displays recieved data in the table
@@ -71,6 +88,9 @@ class MainApplication(tk.Tk):
         """
         self.df = fp.process_app_file(path)
         self.display_data()
+
+    def amt(self):
+        AMTInWindow(self, list(self.df))
 
 
 if __name__ == "__main__":
