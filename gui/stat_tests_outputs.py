@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import statsmodels.api as sm
 
-from dialogs import ErrorWindow
 
 # HACK: Manually add the project root to sys.path to enable relative imports
 # when running 'temporal.py' directly from its location.
@@ -17,6 +16,7 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 # The linter (e.g., flake8/isort) would normally complain here,
 # but the sys.path modification is required for finding 'src'.
+from gui.dialogs import ErrorWindow, resource_path  # noqa
 import src.gui_backend.functions as funcs  # noqa
 
 plt.style.use('seaborn-v0_8-pastel')
@@ -57,7 +57,9 @@ class AMTOutWindow(tk.Toplevel):
                       f'{self.winfo_screenwidth() // 4}+{AMTIN_WINDOW_YSHIFT}')
         self.resizable(0, 0)
         self.title('AMT result')
-        self.iconphoto(False, tk.PhotoImage(file=r'.\images\output_stat_test.png'))
+
+        image_file = resource_path('images\\output_stat_test.png')
+        self.iconphoto(False, tk.PhotoImage(file=image_file))
 
         # scale canvas (and all other) to full size
         self.grid_columnconfigure(0, weight=1)

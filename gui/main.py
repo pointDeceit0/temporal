@@ -6,7 +6,6 @@ from tkinter import filedialog
 import sys
 import os
 
-from stat_tests_inputs import AMTInWindow
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 # HACK: Manually add the project root to sys.path to enable relative imports
@@ -16,6 +15,8 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 # The linter (e.g., flake8/isort) would normally complain here,
 # but the sys.path modification is required for finding 'src'.
 import src.gui_backend.files_processing as fp  # noqa
+from gui.stat_tests_inputs import AMTInWindow  # noqa
+from gui.dialogs import resource_path  # noqa
 
 
 FILE_TYPES = [
@@ -56,7 +57,10 @@ class MainApplication(tk.Tk):
         self.geometry(f'{MAIN_WINDOW_XWIDTH}x{MAIN_WINDOW_YWIDTH}+{self.winfo_screenwidth() // 5}+{MAIN_WINDOW_YSHIFT}')
         self.resizable(0, 0)
         self.title('temporal')
-        self.iconphoto(False, tk.PhotoImage(file=r'.\images\title_image.png'))
+
+        image_file = resource_path('images\\title_image.png')
+        self.iconphoto(False, tk.PhotoImage(file=image_file))
+        # self.iconphoto(False, tk.PhotoImage(file=f'{os.path.dirname(SCRIPT_DIR)}\\images\\title_image.png'))
 
         # widgets creating
         self.main_window = tk.Frame(self)
