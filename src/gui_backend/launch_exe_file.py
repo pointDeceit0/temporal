@@ -33,7 +33,7 @@ def launch_cpp_from_python(data: ArrayLike, path: str, *args) -> Tuple[bool, Any
         # open pipe for c++ .exe transfering of path of
         # (1) .exe, (2) input temp file name, (3) .exe output file name, (4) array of args
         proc = subprocess.Popen(
-            ['./' + path, in_temp_filename, out_temp_filename] + list(args),
+            [path, in_temp_filename, out_temp_filename] + list(args),
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             bufsize=0
