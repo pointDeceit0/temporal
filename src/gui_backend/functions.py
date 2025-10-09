@@ -10,6 +10,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 from src.gui_backend.launch_exe_file import launch_cpp_from_python  # noqa
+from gui.dialogs import resource_path  # noqa
 
 
 def amt(data: pd.DataFrame, batch_size: int = 1,
@@ -37,9 +38,11 @@ def amt(data: pd.DataFrame, batch_size: int = 1,
     if kwargs.get('to_float32_type', True):
         data = data.astype(np.float32)
 
+    file_path = resource_path(path)
+
     ret = {}
     for c in data:
-        if not (res := launch_cpp_from_python(data[c].values, path, str(batch_size)))[0]:
+        if not (res := launch_cpp_from_python(data[c].values, file_path, str(batch_size)))[0]:
             return res  # tuple recieved
 
         pvalue, pav = res[1].split('\n')

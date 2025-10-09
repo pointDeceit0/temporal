@@ -2,7 +2,18 @@
 
 import tkinter as tk
 from typing import Any, List
-from stat_tests_outputs import AMTOutWindow
+import sys
+import os
+
+# HACK: Manually add the project root to sys.path to enable relative imports
+# when running 'temporal.py' directly from its location.
+SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+
+# The linter (e.g., flake8/isort) would normally complain here,
+# but the sys.path modification is required for finding 'src'.
+from gui.stat_tests_outputs import AMTOutWindow  # noqa
+from gui.dialogs import resource_path  # noqa
 
 
 DEFAULT_FONT = 'TkDefaultFont'
@@ -24,7 +35,9 @@ class AMTInWindow(tk.Toplevel):
                       f'{self.winfo_screenwidth() // 4}+{AMTIN_WINDOW_YSHIFT + self.winfo_screenheight() // 5}')
         self.resizable(0, 0)
         self.title('AMT presetting')
-        self.iconphoto(False, tk.PhotoImage(file=r'.\images\input_stat_test.png'))
+
+        image_file = resource_path('images\\input_stat_test.png')
+        self.iconphoto(False, tk.PhotoImage(file=image_file))
 
         # stretch column and row for calculate button
         self.grid_rowconfigure(max(len(variables) + 2, 5), weight=1)
